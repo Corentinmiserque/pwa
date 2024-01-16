@@ -36,7 +36,7 @@ const installButton = document.getElementById('installButton');
   });
 
  
-  const apiUrl = 'https://api.punkapi.com/v2/beers?per_page=10';
+  const apiUrl = 'https://api.punkapi.com/v2/beers/random';
 
   
   fetch(apiUrl)
@@ -44,7 +44,7 @@ const installButton = document.getElementById('installButton');
     .then(data => {
       const beerListContainer = document.querySelector('#beerList');
 
-      
+
       const beerElements = data.map(beer => `<p>${beer.name}</p>`);
 
       beerListContainer.innerHTML = beerElements.join('');
