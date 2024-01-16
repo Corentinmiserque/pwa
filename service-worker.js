@@ -1,6 +1,6 @@
 const version = 1.01
 
-const cache_NAME = "demi" + version
+const cache_NAME = "demo" + version
 
 const toCache=[
     '/',
@@ -15,7 +15,8 @@ const toCache=[
     './icons/favicon-96x96.png',
     './icons/favicon-256x256.png',
     'manifest.json',
-    'https://api.punkapi.com/v2/beers/random'
+    'https://api.punkapi.com/v2/beers/random',
+    // 'page.html'
 ]
 
 const ressourcesToCache= async(ressources) => {
@@ -54,16 +55,39 @@ const networkFirst = async(request) => {
 
 }
 
+//update cache
+function updateCache(request) {
+    return caches.open(cache_NAME).then(cache => {
+        return fetch(request).then(response => {
+            const resClone = response.clone()
+            if (response.status < 400)
+                return cache.put(request, resClone)
+            return response
+        })
+    })
+}
+
+//simple fetch general
 self.addEventListener('fetch', e => {
     const requestUrl = new URL(
         e.request.url
     )
-    console.log(requestUrl)
-    if(!requestUrl.href.includes("https://api")){
+    if(!requestUrl.href.includes("https://api")) {
         e.respondWith(cacheFirst(requestUrl))
     }
-    else{
+    else {
         e.respondWith(networkFirst(requestUrl))
     }
+    updateCache(requestUrl)
 })
+
+//notification//
+
+self.addEventListener('push', e =>{
+    if( !(self.Notification && self.Notification.permission === 'granted') ){
+        return;
+    }
+    console.log('testnotification')
+})
+
 

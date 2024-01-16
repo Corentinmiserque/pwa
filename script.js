@@ -1,7 +1,7 @@
 // Récupérez le bouton d'installation
 const installButton = document.getElementById('installButton');
 
-
+let myNotification = null
 
   // Vérifiez si l'événement `beforeinstallprompt` est disponible
   window.addEventListener('beforeinstallprompt', (event) => {
@@ -51,3 +51,38 @@ const installButton = document.getElementById('installButton');
     })
     .catch(error => console.error('Erreur lors de la récupération des bières:', error));
   
+
+//notification
+
+const notifyMe = () => {
+  const options = {
+    body: "envoyer par pierre",
+    icon: 'icons/favicon-32x32.png',
+    vibrate:[200,100,200,100,200,100,200],
+    url: "https://lesoir.be"
+  }
+    if (!("Notification" in window)) {
+        alert('Pas de notification dans ce navigateur');
+    } else if (Notification.permission === 'granted') {
+      myNotification = new Notification ('hi me' , options)
+        console.log('Notification possible');
+    } else { // Demander la permission
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('Notification possible');
+                myNotification = new Notification ('hi thank you' , options)
+            }
+        });
+    }
+};
+
+if(Notification.permission !== "granted"){
+    if(confirm('recevoir notification?')){
+        notifyMe()
+    }
+}
+
+const $btbNotify = document.querySelector('.notification').addEventListener('click', e => {
+  e.preventDefault()
+  notifyMe()
+})
