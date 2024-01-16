@@ -35,3 +35,19 @@ const installButton = document.getElementById('installButton');
     }
   });
 
+ 
+  const apiUrl = 'https://api.punkapi.com/v2/beers?per_page=10';
+
+  
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      const beerListContainer = document.querySelector('#beerList');
+
+      
+      const beerElements = data.map(beer => `<p>${beer.name}</p>`);
+
+      beerListContainer.innerHTML = beerElements.join('');
+    })
+    .catch(error => console.error('Erreur lors de la récupération des bières:', error));
+  
