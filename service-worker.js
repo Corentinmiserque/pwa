@@ -38,6 +38,22 @@ self.addEventListener('activate', e => {
     return self.clients.claim()
 })
 
+//priorité cache
+const cacheFirst = async(request) => {
+    const responseFromcCache = await caches.match(request)
+    return responseFromcCache
+}
+
+//priorité réseau
+const networkFirst = async(request) => {
+    const responseFromNetwork = await fetch(request)
+    .catch( () => {
+        return caches.match(request)
+    })
+    return responseFromNetwork
+
+}
+
 self.addEventListener('fetch', e => {
     const requestUrl = new URL(
         e.request.url
