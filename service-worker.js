@@ -9,3 +9,10 @@ self.addEventListener('activate', e => {
     console.log("Install SW Version" + version)
     return self.clients.claim()
 })
+
+self.addEventListener('fetch', e => {
+    const requestUrl = new URL(
+        e.request.url
+    )
+    console.log(requestUrl)
+})
